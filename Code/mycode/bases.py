@@ -81,7 +81,10 @@ def encode(number, base):
         i = exponent - i
         en_number.append(base_chars_array[number // (base**i)])
         number = number - (number // (base**i))*(base**i)
-    return ''.join([en_number[num] for num in range(len(en_number)) if (num != 0 and en_number[num] != '0') or (num == 0 and en_number[0] != '0') or num > 0])
+    not_zero = lambda num: ((num != 0 and en_number[num] != '0') or
+                            (num == 0 and en_number[0] != '0') or num > 0)
+    return ''.join([en_number[num] for num in range(len(en_number))
+                    if not_zero(num)])
     # TODO: Encode number in binary (base 2)
     # ...
     # TODO: Encode number in hexadecimal (base 16)
