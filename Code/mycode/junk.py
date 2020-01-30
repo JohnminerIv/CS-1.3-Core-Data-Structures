@@ -46,3 +46,23 @@
                             found_correct = True
                 power -= 1
     return the_number
+
+
+    search = 0
+    index = 0
+    len_array = len(array) - 1
+    sqrt_len = math.sqrt(len_array)
+    print(sqrt_len)
+    while array[index] != item and search < math.floor(sqrt_len):
+        index += ((len_array-index)//2)
+        print((index, search))
+        if (item == array[index]) is True:
+            return index - 1
+        if (item > array[index]) is True:
+            print('1')
+            index += 1
+        else:
+            print('2')
+            len_array = index - 1
+        search += 1
+    return None

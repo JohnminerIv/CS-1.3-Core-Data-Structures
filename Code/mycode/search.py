@@ -10,7 +10,7 @@ def linear_search(array, item):
 
 def linear_search_iterative(array, item):
     # loop over all array values until item is found
-    for index, value in enumerate(array):
+    for index, value in enumerate(array):  # o(n) because it iterates through each item until found
         if item == value:
             return index  # found
     return None  # not found
@@ -24,7 +24,7 @@ def linear_search_recursive(array, item, index=0):
         array[index + 1]
     except:
         return None
-    return linear_search_recursive(array, item, index + 1)
+    return linear_search_recursive(array, item, index + 1) # o(n) because it iterates through each item until found
     # once implemented, change linear_search to call linear_search_recursive
     # to verify that your recursive implementation passes all tests
 
@@ -42,7 +42,7 @@ def binary_search_iterative(array, item):
     right = len(array) - 1
     left = 0
     sqrt_len_array = int(math.sqrt(right))
-    for i in range(sqrt_len_array + 1):
+    for i in range(sqrt_len_array + 1):  # o(log n) because it halves the list of items to search in each iteration
         midpoint = left + ((right-left)//2)
         if array[midpoint] == item:
             return midpoint
@@ -57,7 +57,7 @@ def binary_search_iterative(array, item):
 
 def binary_search_recursive(array, item, left=None, right=None):
     # TODO: implement binary search recursively here
-    if left is None and right is None:
+    if left is None:
         left = 0
         right = len(array) - 1
     midpoint = left + ((right-left)//2)
@@ -66,9 +66,9 @@ def binary_search_recursive(array, item, left=None, right=None):
     elif left == right:
         return None
     elif array[midpoint] < item:
-        return binary_search_recursive(array, item, midpoint + 1, right)
+        return binary_search_recursive(array, item, midpoint + 1, right)  # o(log n) because it halves the list of items to search in each iteration
     else:
-        return binary_search_recursive(array, item, left, midpoint - 1)
+        return binary_search_recursive(array, item, left, midpoint - 1)  # o(log n) because it halves the list of items to search in each iteration
 
     # once implemented, change binary_search to call binary_search_recursive
     # to verify that your recursive implementation passes all tests

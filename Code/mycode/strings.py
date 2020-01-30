@@ -5,6 +5,20 @@ def contains(text, pattern):
     assert isinstance(text, str), 'text is not a string: {}'.format(text)
     assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
     # TODO: Implement contains here (iteratively and/or recursively)
+    lpattern = len(pattern)
+    ltext = len(text)
+    for l in range(ltext):
+        if lpattern == 0:
+            return True
+        if text[l] == pattern[0]:
+            count = 0
+            if lpattern + l <= ltext:
+                for le in range(lpattern):
+                    if text[l + le] == pattern[le]:
+                        count += 1
+            if count == lpattern:
+                return True
+    return False
 
 
 def find_index(text, pattern):
@@ -13,6 +27,21 @@ def find_index(text, pattern):
     assert isinstance(text, str), 'text is not a string: {}'.format(text)
     assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
     # TODO: Implement find_index here (iteratively and/or recursively)
+    lpattern = len(pattern)
+    ltext = len(text)
+    index = None
+    for l in range(ltext):
+        if lpattern == 0:
+            return l
+        if text[l] == pattern[0]:
+            count = 0
+            if lpattern + l <= ltext:
+                for le in range(lpattern):
+                    if text[l + le] == pattern[le]:
+                        count += 1
+            if count == lpattern:
+                return l
+    return index
 
 
 def find_all_indexes(text, pattern):
@@ -21,6 +50,21 @@ def find_all_indexes(text, pattern):
     assert isinstance(text, str), 'text is not a string: {}'.format(text)
     assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
     # TODO: Implement find_all_indexes here (iteratively and/or recursively)
+    lpattern = len(pattern)
+    ltext = len(text)
+    indexs = []
+    for l in range(ltext):
+        if lpattern == 0:
+            indexs.append(l)
+        elif text[l] == pattern[0]:
+            count = 0
+            if lpattern + l <= ltext:
+                for le in range(lpattern):
+                    if text[l + le] == pattern[le]:
+                        count += 1
+            if count == lpattern:
+                indexs.append(l)
+    return indexs
 
 
 def test_string_algorithms(text, pattern):
