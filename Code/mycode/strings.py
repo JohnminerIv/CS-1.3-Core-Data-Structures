@@ -11,11 +11,13 @@ def contains(text, pattern):
         if lpattern == 0:
             return True
         if text[l] == pattern[0]:
-            count = 0
+            count = 1
             if lpattern + l <= ltext:
-                for le in range(lpattern):
+                for le in range(1, lpattern):
                     if text[l + le] == pattern[le]:
                         count += 1
+                    else:
+                        break
             if count == lpattern:
                 return True
     return False
@@ -31,14 +33,16 @@ def find_index(text, pattern):
     ltext = len(text)
     index = None
     for l in range(ltext):
-        if lpattern == 0:
+        if lpattern == 0
             return l
         if text[l] == pattern[0]:
-            count = 0
+            count = 1
             if lpattern + l <= ltext:
-                for le in range(lpattern):
+                for le in range(1, lpattern):
                     if text[l + le] == pattern[le]:
                         count += 1
+                    else:
+                        break
             if count == lpattern:
                 return l
     return index
@@ -57,13 +61,16 @@ def find_all_indexes(text, pattern):
         if lpattern == 0:
             indexs.append(l)
         elif text[l] == pattern[0]:
-            count = 0
             if lpattern + l <= ltext:
-                for le in range(lpattern):
-                    if text[l + le] == pattern[le]:
-                        count += 1
-            if count == lpattern:
-                indexs.append(l)
+                for le in range(0, lpattern):
+                    if text[l + le] != pattern[le]:
+                        break
+                    elif le == lpattern-1:
+                        indexs.append(l)
+            else:
+                break
+        elif lpattern + l >= ltext:
+            break
     return indexs
 
 

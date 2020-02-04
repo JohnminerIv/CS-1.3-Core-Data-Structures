@@ -117,6 +117,11 @@ class StringsTest(unittest.TestCase):
         # You'll need a lot more than this to test your algorithm's robustness
         # ...
 
+    def test_find_patern_in_pattern(self):
+        assert find_all_indexes('abababababababa', 'aba') == [0,2,4,6,8,10,12]
+        assert find_all_indexes('levelevel', 'level') == [0,4]
+        assert find_all_indexes('haaaaaaaaaa', 'haaaaaaaaaaa') == []
+
 
 if __name__ == '__main__':
     unittest.main()

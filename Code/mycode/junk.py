@@ -66,3 +66,22 @@
             len_array = index - 1
         search += 1
     return None
+
+
+def solution(string,markers):
+    #your code here
+    len_str = len(string)
+    after = False
+    new_string = ''
+    for i in range(len_str):
+        if after is True and i + 1 != len_str:
+            print('hi')
+            if string[i] + string[i+1] == '\\\n':
+                after = False
+                new_string += string[i]
+        if string[i] in markers or after is True:
+            after = True
+        else:
+            new_string += string[i]
+    return new_string
+        

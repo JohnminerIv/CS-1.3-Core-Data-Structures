@@ -25,14 +25,13 @@ def is_palindrome_iterative(text):
     while (left > right) is False:
         if text[right] in wrong:
             right -= 1
-            return is_palindrome_recursive(text, left, right)
-        if text[left] in wrong:
+        elif text[left] in wrong:
             left += 1
-            return is_palindrome_recursive(text, left, right)
-        if text[left].lower() != text[right].lower():
+        elif text[left].lower() != text[right].lower():
             return False
-        left += 1
-        right -= 1
+        else:
+            left += 1
+            right -= 1
     return True
 
     # once implemented, change is_palindrome to call is_palindrome_iterative
