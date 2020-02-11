@@ -4,23 +4,12 @@ def contains(text, pattern):
     """Return a boolean indicating whether pattern occurs in text."""
     assert isinstance(text, str), 'text is not a string: {}'.format(text)
     assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
+    """Same worst case as find_all_indexes()"""
     # TODO: Implement contains here (iteratively and/or recursively)
-    lpattern = len(pattern)
-    ltext = len(text)
-    for l in range(ltext):
-        if lpattern == 0:
-            return True
-        if text[l] == pattern[0]:
-            count = 1
-            if lpattern + l <= ltext:
-                for le in range(1, lpattern):
-                    if text[l + le] == pattern[le]:
-                        count += 1
-                    else:
-                        break
-            if count == lpattern:
-                return True
-    return False
+    array = find_all_indexes(text, pattern, 1)
+    if len(array) == 0:
+        return False
+    return True
 
 
 def find_index(text, pattern):
@@ -28,38 +17,36 @@ def find_index(text, pattern):
     or None if not found."""
     assert isinstance(text, str), 'text is not a string: {}'.format(text)
     assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
-    # TODO: Implement find_index here (iteratively and/or recursively)
-    lpattern = len(pattern)
-    ltext = len(text)
-    index = None
-    for l in range(ltext):
-        if lpattern == 0
-            return l
-        if text[l] == pattern[0]:
-            count = 1
-            if lpattern + l <= ltext:
-                for le in range(1, lpattern):
-                    if text[l + le] == pattern[le]:
-                        count += 1
-                    else:
-                        break
-            if count == lpattern:
-                return l
-    return index
+    """Same worst case as find_all_indexes()"""
+    # TODO: Implement find_index here (iteratively and/or recursively)\
+    array = find_all_indexes(text, pattern, 1)
+    if len(array) == 0:
+        return None
+    return array[0]
 
 
-def find_all_indexes(text, pattern):
+def find_all_indexes(text, pattern, callfrom=0):
     """Return a list of starting indexes of all occurrences of pattern in text,
     or an empty list if not found."""
     assert isinstance(text, str), 'text is not a string: {}'.format(text)
     assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
     # TODO: Implement find_all_indexes here (iteratively and/or recursively)
+    """ Time Complexity annotation!!!!
+    t = len(text)
+    p = len(pattern)
+    worst_case_time_complexity = O(((t-p)*p)+(t-p)) or O(t*p)
+    ((t-p)*p) is because each position might start a pattern and we check until the
+    matching ends which might be the last letter of p. We won't check the places
+    in the text if the pattern is to long to exist there.
+    +(t-p) is because I didn't optimize."""
     lpattern = len(pattern)
     ltext = len(text)
     indexs = []
     for l in range(ltext):
         if lpattern == 0:
             indexs.append(l)
+            if callfrom == 1:
+                return indexs
         elif text[l] == pattern[0]:
             if lpattern + l <= ltext:
                 for le in range(0, lpattern):
@@ -67,11 +54,14 @@ def find_all_indexes(text, pattern):
                         break
                     elif le == lpattern-1:
                         indexs.append(l)
+                        if callfrom == 1:
+                            return indexs
             else:
                 break
         elif lpattern + l >= ltext:
             break
     return indexs
+
 
 
 def test_string_algorithms(text, pattern):
