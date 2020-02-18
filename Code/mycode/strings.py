@@ -6,7 +6,8 @@ def contains(text, pattern):
     assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
     """Same worst case as find_all_indexes()"""
     # TODO: Implement contains here (iteratively and/or recursively)
-    array = find_all_indexes(text, pattern, 1)
+    #array = find_all_indexes(text, pattern, 1)
+    array = find_all_indexes_r(text, pattern)
     if len(array) == 0:
         return False
     return True
@@ -19,7 +20,8 @@ def find_index(text, pattern):
     assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
     """Same worst case as find_all_indexes()"""
     # TODO: Implement find_index here (iteratively and/or recursively)\
-    array = find_all_indexes(text, pattern, 1)
+    #array = find_all_indexes(text, pattern, 1)
+    array = find_all_indexes_r(text, pattern)
     if len(array) == 0:
         return None
     return array[0]
@@ -61,6 +63,31 @@ def find_all_indexes(text, pattern, callfrom=0):
         elif lpattern + l >= ltext:
             break
     return indexs
+
+
+def find_all_indexes_r(text, pattern, itext=0, ipattern=0, indices=None):
+    """Recursive implementation of find_all_indexes. The time complexity should
+    be equialent to find all indexs not recursive."""
+    if indices is None:
+        indices = []
+    if len(text) == itext + ipattern:
+        if len(pattern) == ipattern and len(pattern) != 0:
+            indices.append(itext)
+        return indices
+    elif len(pattern) == 0:
+        indices.append(itext)
+        itext += 1
+    elif len(pattern) == ipattern:
+        indices.append(itext)
+        ipattern = 0
+        itext += 1
+    elif pattern[ipattern] == text[ipattern + itext]:
+        ipattern += 1
+    else:
+        ipattern = 0
+        itext += 1
+    return find_all_indexes_r(text, pattern, itext, ipattern, indices)
+
 
 
 

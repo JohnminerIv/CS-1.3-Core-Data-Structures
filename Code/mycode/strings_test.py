@@ -1,6 +1,6 @@
 #!python
 
-from strings import contains, find_index, find_all_indexes
+from strings import contains, find_index, find_all_indexes, find_all_indexes_r
 import unittest
 
 
@@ -117,10 +117,53 @@ class StringsTest(unittest.TestCase):
         # You'll need a lot more than this to test your algorithm's robustness
         # ...
 
-    def test_find_pattern_in_pattern(self):
+    def test_my_own_cases(self):
         assert find_all_indexes('abababababababa', 'aba') == [0,2,4,6,8,10,12]
         assert find_all_indexes('levelevel', 'level') == [0,4]
-        assert find_all_indexes('haaaaaaaaaa', 'haaaaaaaaaaa') == []
+        # worst case senario
+        assert find_all_indexes('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaah',
+                                'aaaaaaaaaaah') == [32]
+        assert find_all_indexes('ooooo', 'oo') == [0,1,2,3]
+        assert find_all_indexes('topotopot', 'pot') == [2,6]
+        assert find_all_indexes('tap', 'tap') == [0]
+
+    def test_what_im_doing_with_my_life(self):
+        assert find_all_indexes('\\', '\\') == [0]
+        assert find_all_indexes('t\\\\', '\\') == [1,2]
+        assert find_all_indexes('t\\\\', '\\\\') == [1]
+        assert find_all_indexes('\n', '\n') == [0]
+        assert find_all_indexes('\n\n', '\n') == [0,1]
+        assert find_all_indexes('\ttap', 'tap') == [1]
+        assert find_all_indexes('\ntap', 'tap') == [1]
+        assert find_all_indexes('\ttap', '\ttap') == [0]
+        assert find_all_indexes('\ntap', '\ntap') == [0]
+        assert find_all_indexes('t\nap', 't\nap') == [0]
+        assert find_all_indexes('\n', '') == [0]
+        assert find_all_indexes('\ntap', '\ntap\n') == []
+        assert find_all_indexes('\"\"\"hello\"\"\"', 'hello') == [3]
+
+    def test_my_recursion(self):
+        assert find_all_indexes_r('abababababababa', 'aba') == [0,2,4,6,8,10,12]
+        assert find_all_indexes_r('levelevel', 'level') == [0,4]
+        assert find_all_indexes_r('aaaaaaaaaaaaaaaaaaaaaaaah', 'aaaaaaaaaaah') == [13]
+        assert find_all_indexes_r('ashhashash', 'hash') == [3,6]
+        assert find_all_indexes_r('ooooo', 'oo') == [0,1,2,3]
+
+    def test_my_recursion_non_matching(self):
+        assert find_all_indexes_r('abababababababa', 'abc') == []
+        assert find_all_indexes_r('abababababababa', 'aca') == []
+        assert find_all_indexes_r('abababababababa', 'cba') == []
+        assert find_all_indexes_r('cat', 'w') == []
+
+    def test_my_recusionistic_stupidity(self):
+        assert find_all_indexes_r('lol', '') == [0,1,2]
+        assert find_all_indexes_r('lol', 'l') == [0,2]
+        assert find_all_indexes_r('lol', 'lo') == [0]
+        assert find_all_indexes_r('lol', 'ol') == [1]
+        assert find_all_indexes_r('lol', 'lol') == [0]
+        assert find_all_indexes_r('lol', 'lolo') == []
+        assert find_all_indexes_r('', '') == []
+
 
 
 if __name__ == '__main__':
