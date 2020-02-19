@@ -222,19 +222,19 @@ class BinarySearchTree(object):
         else:
             parent = self._find_parent_node_recursive(item, self.root)
             if parent.left == item:
-                self.funny(self, parent.left)
+                self.move_down(self, parent.left)
                 parent.left = parent.left.left
             if parent.right == item:
-                self.funny(self, parent.right)
+                self.move_down(self, parent.right)
                 parent.right = parent.right.left
             else:
                 raise ValueError
 
-    def funny(self, node, extra_boi=None):
+    def move_down(self, node, extra_boi=None):
         if node.left is not None:
-            extra_boi = node.left.right
+            extra = node.left.right
             node.left.right = node.right
-            return self.funny(self, node.left, extra_boi)
+            return self.move_down(self, node.left, extra)
 
     def items_in_order(self):
         """Return an in-order list of all items in this binary search tree."""
