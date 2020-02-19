@@ -84,4 +84,27 @@ def solution(string,markers):
         else:
             new_string += string[i]
     return new_string
-        
+
+
+
+
+    if len(pattern) == 0:
+        # print(len(pattern) == 0)
+        # print(pattern)
+        if len(indices) == len(text):
+            return indices
+        indices.append(itext)
+    elif len(pattern) == ipattern:
+        print(len(pattern) == ipattern)
+        print(pattern)
+        itext -= ipattern
+        indices.append(itext)
+        ipattern = 0
+    elif len(text) == itext:
+        return indices
+    elif pattern[ipattern] == text[itext]:
+        ipattern += 1
+    else:
+        ipattern = 0
+    itext += 1
+    return find_all_indexes(text, pattern, itext, ipattern, indices)

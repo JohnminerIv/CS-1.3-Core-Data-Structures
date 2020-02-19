@@ -41,6 +41,18 @@ def create_base(base):
     return chars_array
 
 
+def r_split(digits, base1, base2):
+    pass
+
+
+def r_encode(digits, base):
+    pass
+
+
+def r_decode(digits, base):
+    pass
+
+
 def decode(digits, base):
     """Decode given digits in given base to number in base 10.
     digits: str -- string representation of number (in given base)
