@@ -216,25 +216,133 @@ class BinarySearchTree(object):
         # TODO: Use helper methods and break this algorithm down into 3 cases
         # based on how many children the node containing the given item has and
         # implement new helper methods for subtasks of the more complex cases
-        if item == self.root.data:
-            self.funny(self.root)
-            self.root = self.root.left
+        parent = self._find_parent_node_recursive(item, self.root)
+        if parent is None:
+            if self.root.right is None and self.root.left is None:
+                self.no_childs(parent, item)
+            elif self.root.right is not None and self.root.left is not None:
+                self.two_childs(parent, item)
+            else:
+                self.one_childs(parent, item)
         else:
-            parent = self._find_parent_node_recursive(item, self.root)
-            if parent.left == item:
-                self.move_down(self, parent.left)
-                parent.left = parent.left.left
-            if parent.right == item:
-                self.move_down(self, parent.right)
-                parent.right = parent.right.left
+            if ((parent.left.data == item and
+                    parent.left.left is None and
+                    parent.left.right is None) or
+                    (parent.right.data == item and
+                        parent.right.left is None and
+                        parent.right.right is None)):
+                self.no_childs(parent, item)
+            elif ((parent.left.data == item and
+                    parent.left.left is not None and
+                    parent.left.right is not None) or
+                    (parent.right.data == item and
+                        parent.right.left is not None and
+                        parent.right.right is not None)):
+                self.two_childs(parent, item)
+            else:
+                self.one_childs(parent, item)
+
+    def no_childs(self, parent, item):
+        if parent is not None:
+            if parent.left.data == item:
+                parent.left = None
+                self.size -= 1
+            elif parent.right.data == item:
+                parent.right = None
+                self.size -= 1
+            else:
+                raise ValueError
+        else:
+            if item == self.root.data:
+                self.root.data = None
+                self.size -= 1
             else:
                 raise ValueError
 
-    def move_down(self, node, extra_boi=None):
-        if node.left is not None:
-            extra = node.left.right
-            node.left.right = node.right
-            return self.move_down(self, node.left, extra)
+    def one_childs(self, parent, item):
+        if parent is not None:
+            if parent.left.data == item:
+                if parent.left.left is not None:
+                    next_node = parent.left.left
+                    parent.left.left = None
+                    parent.left = next_node
+                    self.size -= 1
+                else:
+                    next_node = parent.left.right
+                    parent.left.right = None
+                    parent.left = next_node
+                    self.size -= 1
+            elif parent.right.data == item:
+                if parent.right.left is not None:
+                    next_node = parent.right.left
+                    parent.right.left = None
+                    parent.right = next_node
+                    self.size -= 1
+                else:
+                    next_node = parent.right.right
+                    parent.right.right = None
+                    parent.right = next_node
+                    self.size -= 1
+            else:
+                raise ValueError
+        else:
+            if item == self.root.data:
+                if self.root.left is not None:
+                    next_node = self.root.left
+                    self.root.left = None
+                    self.root = next_node
+                    self.size -= 1
+                else:
+                    next_node = self.root.right
+                    self.root.right = None
+                    self.root = next_node
+                    self.size -= 1
+            else:
+                raise ValueError
+
+    def two_childs(self, parent, item):
+        if parent is not None:
+            if parent.left.data == item:
+                successor = self.find_successor(parent.left)
+                self.delete(successor.data)
+                successor.left = parent.left.left
+                successor.right = parent.left.right
+                parent.left.left = None
+                parent.left.right = None
+                parent.left = successor
+                self.size -= 1
+            elif parent.right.data == item:
+                successor = self.find_successor(parent.right)
+                self.delete(successor.data)
+                successor.left = parent.right.left
+                successor.right = parent.right.right
+                parent.right.left = None
+                parent.right.right = None
+                parent.right = successor
+                self.size -= 1
+            else:
+                raise ValueError
+        else:
+            if item == self.root.data:
+                successor = self.find_successor(self.root)
+                # print(successor)
+                self.delete(successor.data)
+                successor.left = self.root.left
+                successor.right = self.root.right
+                self.root.right = None
+                self.root.left = None
+                self.root = successor
+                self.size -= 1
+            else:
+                raise ValueError
+
+    def find_successor(self, node):
+        new_node = node.left
+        parent = None
+        while new_node is not None:
+            parent = new_node
+            new_node = new_node.right
+        return parent
 
     def items_in_order(self):
         """Return an in-order list of all items in this binary search tree."""
