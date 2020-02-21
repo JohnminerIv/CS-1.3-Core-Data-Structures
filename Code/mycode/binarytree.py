@@ -1,6 +1,6 @@
 #!python
 from queue import LinkedQueue
-
+import random
 class BinaryTreeNode(object):
 
     def __init__(self, data):
@@ -217,37 +217,39 @@ class BinarySearchTree(object):
         # based on how many children the node containing the given item has and
         # implement new helper methods for subtasks of the more complex cases
         parent = self._find_parent_node_recursive(item, self.root)
-        if parent is None:
-            if self.root.right is None and self.root.left is None:
-                self.no_childs(parent, item)
-            elif self.root.right is not None and self.root.left is not None:
-                self.two_childs(parent, item)
-            else:
-                self.one_childs(parent, item)
-        else:
-            if ((parent.left.data == item and
-                    parent.left.left is None and
-                    parent.left.right is None) or
-                    (parent.right.data == item and
-                        parent.right.left is None and
-                        parent.right.right is None)):
-                self.no_childs(parent, item)
-            elif ((parent.left.data == item and
-                    parent.left.left is not None and
-                    parent.left.right is not None) or
-                    (parent.right.data == item and
-                        parent.right.left is not None and
-                        parent.right.right is not None)):
-                self.two_childs(parent, item)
-            else:
-                self.one_childs(parent, item)
-
-    def no_childs(self, parent, item):
+        node = None
+        direction = None
         if parent is not None:
-            if parent.left.data == item:
+            if parent.left is not None:
+                if parent.left.data == item:
+                    node = parent.left
+                    direction = 'left'
+            if parent.right is not None:
+                if parent.right.data == item:
+                    node = parent.right
+                    direction = 'right'
+        else:
+            if self.root is not None:
+                if self.root.data == item:
+                    node = self.root
+        if node is None:
+            raise ValueError
+        elif node.left is None and node.right is None:
+            self.no_childs(parent, direction, item)
+        elif node.left is not None and node.right is not None:
+            self.two_childs(parent, direction, item)
+        else:
+            if node.left is not None:
+                self.one_childs(parent, direction, item)
+            else:
+                self.one_childs(parent, direction, item)
+
+    def no_childs(self, parent, direction, item):
+        if parent is not None:
+            if direction == 'left':
                 parent.left = None
                 self.size -= 1
-            elif parent.right.data == item:
+            elif direction == 'right':
                 parent.right = None
                 self.size -= 1
             else:
@@ -259,9 +261,9 @@ class BinarySearchTree(object):
             else:
                 raise ValueError
 
-    def one_childs(self, parent, item):
+    def one_childs(self, parent, direction, item):
         if parent is not None:
-            if parent.left.data == item:
+            if direction == 'left':
                 if parent.left.left is not None:
                     next_node = parent.left.left
                     parent.left.left = None
@@ -272,7 +274,7 @@ class BinarySearchTree(object):
                     parent.left.right = None
                     parent.left = next_node
                     self.size -= 1
-            elif parent.right.data == item:
+            elif direction == 'right':
                 if parent.right.left is not None:
                     next_node = parent.right.left
                     parent.right.left = None
@@ -300,9 +302,9 @@ class BinarySearchTree(object):
             else:
                 raise ValueError
 
-    def two_childs(self, parent, item):
+    def two_childs(self, parent, direction, item):
         if parent is not None:
-            if parent.left.data == item:
+            if direction == 'left':
                 successor = self.find_successor(parent.left)
                 self.delete(successor.data)
                 successor.left = parent.left.left
@@ -311,7 +313,7 @@ class BinarySearchTree(object):
                 parent.left.right = None
                 parent.left = successor
                 self.size -= 1
-            elif parent.right.data == item:
+            elif direction == 'right':
                 successor = self.find_successor(parent.right)
                 self.delete(successor.data)
                 successor.left = parent.right.left
@@ -469,8 +471,9 @@ class BinarySearchTree(object):
 def test_binary_search_tree():
     # Create a complete binary search tree of 3, 7, or 15 items in level-order
     # items = [2, 1, 3]
-    items = [4, 2, 6, 1, 3, 5, 7]
-    # items = [8, 4, 12, 2, 6, 10, 14, 1, 3, 5, 7, 9, 11, 13, 15]
+    # items = [4, 2, 6, 1, 3, 5, 7]
+
+    items = [8, 4, 12, 2, 6, 10, 14, 1, 3, 5, 7, 9, 11, 13, 15]
     print('items: {}'.format(items))
 
     tree = BinarySearchTree()
@@ -496,6 +499,14 @@ def test_binary_search_tree():
     print('items pre-order:   {}'.format(tree.items_pre_order()))
     print('items post-order:  {}'.format(tree.items_post_order()))
     print('items level-order: {}'.format(tree.items_level_order()))
+    print('delete random items: ')
+    for i in range(len(items)):
+        item = random.choice(items)
+        items.remove(item)
+        print(f'Deleted item: {item}')
+        print(f'root{tree.root}')
+        tree.delete(item)
+        print('items in-order:    {}'.format(tree.items_in_order()))
 
 
 if __name__ == '__main__':
