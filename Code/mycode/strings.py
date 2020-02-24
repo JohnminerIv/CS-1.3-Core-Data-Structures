@@ -6,7 +6,8 @@ def contains(text, pattern):
     assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
     """Same worst case as find_all_indexes()"""
     # TODO: Implement contains here (iteratively and/or recursively)
-    #array = find_all_indexes(text, pattern, 1)
+    # iterative or recursive
+    # array = find_all_indexes(text, pattern, 1)
     array = find_all_indexes_r(text, pattern)
     if len(array) == 0:
         return False
@@ -20,7 +21,8 @@ def find_index(text, pattern):
     assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
     """Same worst case as find_all_indexes()"""
     # TODO: Implement find_index here (iteratively and/or recursively)\
-    #array = find_all_indexes(text, pattern, 1)
+    # iterative or recursive
+    # array = find_all_indexes(text, pattern, 1)
     array = find_all_indexes_r(text, pattern)
     if len(array) == 0:
         return None
