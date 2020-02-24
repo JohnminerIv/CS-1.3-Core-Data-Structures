@@ -29,7 +29,8 @@ class LinkedStack(object):
 
     def push(self, item):
         """Insert the given item on the top of this stack.
-        Running time: O(1) – Why? Just make a node and move pointers."""
+        Running time: O(1) – Why? Just make a node and move pointers which are
+        counters."""
         self.list.prepend(item)
 
     def peek(self):
@@ -80,7 +81,8 @@ class ArrayStack(object):
 
     def push(self, item):
         """Insert the given item on the top of this stack.
-        Running time: O(1) average – Why? appending to a list as normal."""
+        Running time: O(1) average – Why? appending to a list as normal is O(n)
+        unless the list needs to be resized."""
         # TODO: Insert given item
         self.list.append(item)
 
