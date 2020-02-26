@@ -7,8 +7,8 @@ def contains(text, pattern):
     """Same worst case as find_all_indexes()"""
     # TODO: Implement contains here (iteratively and/or recursively)
     # iterative or recursive
-    # array = find_all_indexes(text, pattern, 1)
-    array = find_all_indexes_r(text, pattern)
+    array = find_all_indexes(text, pattern, 1)
+    # array = find_all_indexes_r(text, pattern)
     if len(array) == 0:
         return False
     return True
@@ -22,8 +22,8 @@ def find_index(text, pattern):
     """Same worst case as find_all_indexes()"""
     # TODO: Implement find_index here (iteratively and/or recursively)\
     # iterative or recursive
-    # array = find_all_indexes(text, pattern, 1)
-    array = find_all_indexes_r(text, pattern)
+    array = find_all_indexes(text, pattern, 1)
+    # array = find_all_indexes_r(text, pattern)
     if len(array) == 0:
         return None
     return array[0]
