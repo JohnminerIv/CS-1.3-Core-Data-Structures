@@ -23,6 +23,11 @@ class BinaryTreeNode(object):
         # TODO: Check if either left child or right child has a value
         return self.left is not None or self.right is not None
 
+    def is_branchy_boi(self):
+        """Return True if this node is a branchy boi (has at least two childs)."""
+        # TODO: Check if either left child and right child has a value
+        return self.left is not None and self.right is not None
+
     def height(self):
         """Return the height of this node (the number of edges on the longest
         downward path from this node to a descendant leaf node).
@@ -40,13 +45,6 @@ class BinaryTreeNode(object):
         return max(left_val, right_val)
         # Return one more than the greater of the left height and right height
 
-    def sum_childs(self):
-        if self.left != None and self.right != None:
-            return 2
-        elif self.left != None or self.right != None:
-            return 1
-        else:
-            return 0
 
 
 class BinarySearchTree(object):
@@ -237,9 +235,9 @@ class BinarySearchTree(object):
             node = self._find_node_recursive(item, self.root)
         if node is None:
             raise ValueError
-        elif node.sum_childs() == 0:
+        elif node.is_leaf():
             self.no_childs(parent, node)
-        elif node.sum_childs() == 2:
+        elif node.is_branchy_boi():
             self.two_childs(node)
         else:
             self.one_childs(parent, node)
