@@ -40,6 +40,14 @@ class BinaryTreeNode(object):
         return max(left_val, right_val)
         # Return one more than the greater of the left height and right height
 
+    def sum_childs(self):
+        if self.left != None and self.right != None:
+            return 2
+        elif self.left != None or self.right != None:
+            return 1
+        else:
+            return 0
+
 
 class BinarySearchTree(object):
 
@@ -223,125 +231,53 @@ class BinarySearchTree(object):
         # based on how many children the node containing the given item has and
         # implement new helper methods for subtasks of the more complex cases
         parent = self._find_parent_node_recursive(item, self.root)
-        node = None
-        direction = None
         if parent is not None:
-            if parent.left is not None:
-                if parent.left.data == item:
-                    node = parent.left
-                    direction = 'left'
-            if parent.right is not None:
-                if parent.right.data == item:
-                    node = parent.right
-                    direction = 'right'
+            node = self._find_node_recursive(item, parent)
         else:
-            if self.root is not None:
-                if self.root.data == item:
-                    node = self.root
+            node = self._find_node_recursive(item, self.root)
         if node is None:
             raise ValueError
-        elif node.left is None and node.right is None:
-            self.no_childs(parent, direction, item)
-        elif node.left is not None and node.right is not None:
-            self.two_childs(parent, direction, item)
+        elif node.sum_childs() == 0:
+            self.no_childs(parent, node)
+        elif node.sum_childs() == 2:
+            self.two_childs(node)
         else:
-            if node.left is not None:
-                self.one_childs(parent, direction, item)
-            else:
-                self.one_childs(parent, direction, item)
-        if self.size == 0:
-            self.root = None
+            self.one_childs(parent, node)
 
-    def no_childs(self, parent, direction, item):
+    def no_childs(self, parent, node):
         if parent is not None:
-            if direction == 'left':
+            if node.data < parent.data:
                 parent.left = None
-                self.size -= 1
-            elif direction == 'right':
+            else:
                 parent.right = None
-                self.size -= 1
-            else:
-                raise ValueError
         else:
-            if item == self.root.data:
-                self.root.data = None
-                self.size -= 1
-            else:
-                raise ValueError
+            self.root = None
+        self.size -= 1
 
-    def one_childs(self, parent, direction, item):
+    def one_childs(self, parent, node):
+        left, right = node.left, node.right
         if parent is not None:
-            if direction == 'left':
-                if parent.left.left is not None:
-                    next_node = parent.left.left
-                    parent.left.left = None
-                    parent.left = next_node
-                    self.size -= 1
+            if node.data < parent.data:
+                if left is not None:
+                    parent.left = left
                 else:
-                    next_node = parent.left.right
-                    parent.left.right = None
-                    parent.left = next_node
-                    self.size -= 1
-            elif direction == 'right':
-                if parent.right.left is not None:
-                    next_node = parent.right.left
-                    parent.right.left = None
-                    parent.right = next_node
-                    self.size -= 1
-                else:
-                    next_node = parent.right.right
-                    parent.right.right = None
-                    parent.right = next_node
-                    self.size -= 1
+                    parent.left = right
             else:
-                raise ValueError
+                if left is not None:
+                    parent.right = left
+                else:
+                    parent.right = right
         else:
-            if item == self.root.data:
-                if self.root.left is not None:
-                    next_node = self.root.left
-                    self.root.left = None
-                    self.root = next_node
-                    self.size -= 1
-                else:
-                    next_node = self.root.right
-                    self.root.right = None
-                    self.root = next_node
-                    self.size -= 1
+            if left is not None:
+                self.root = left
             else:
-                raise ValueError
+                self.root = right
+        self.size -= 1
 
-    def two_childs(self, parent, direction, item):
-        if parent is not None:
-            if direction == 'left':
-                successor = self.find_successor(parent.left)
-                self.delete(successor.data)
-                successor.left = parent.left.left
-                successor.right = parent.left.right
-                parent.left.left = None
-                parent.left.right = None
-                parent.left = successor
-            elif direction == 'right':
-                successor = self.find_successor(parent.right)
-                self.delete(successor.data)
-                successor.left = parent.right.left
-                successor.right = parent.right.right
-                parent.right.left = None
-                parent.right.right = None
-                parent.right = successor
-            else:
-                raise ValueError
-        else:
-            if item == self.root.data:
-                successor = self.find_successor(self.root)
-                # print(successor)
-                self.delete(successor.data)
-                successor.left = self.root.left
-                successor.right = self.root.right
-                self.root.right = None
-                self.root.left = None
-                self.root = successor
-            else:
-                raise ValueError
+    def two_childs(self, node):
+        successor = self.find_successor(node)
+        self.delete(successor.data)
+        node.data = successor.data
 
     def find_successor(self, node):
         new_node = node.left
