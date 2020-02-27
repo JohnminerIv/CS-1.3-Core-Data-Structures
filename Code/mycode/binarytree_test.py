@@ -191,9 +191,7 @@ class BinarySearchTreeTest(unittest.TestCase):
         assert tree.root.left is None
         assert tree.root.right is None
         tree.delete(3)
-        assert tree.root.data is None
-        assert tree.root.left is None
-        assert tree.root.right is None
+        assert tree.root is None
 
     def test_delete_with_7_items(self):
         # Create a complete binary search tree of 7 items in level-order

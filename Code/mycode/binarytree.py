@@ -72,6 +72,8 @@ class BinarySearchTree(object):
         Worst case running time: O(n) if item is in a leaf in a completely
         unbalanced tree"""
         # Find a node with the given item, if any
+        if self.root is None:
+            return False
         node = self._find_node_recursive(item, self.root)
         # Return True if a node was found, or False
         return node is not None
@@ -247,6 +249,8 @@ class BinarySearchTree(object):
                 self.one_childs(parent, direction, item)
             else:
                 self.one_childs(parent, direction, item)
+        if self.size == 0:
+            self.root = None
 
     def no_childs(self, parent, direction, item):
         if parent is not None:
@@ -316,7 +320,6 @@ class BinarySearchTree(object):
                 parent.left.left = None
                 parent.left.right = None
                 parent.left = successor
-                self.size -= 1
             elif direction == 'right':
                 successor = self.find_successor(parent.right)
                 self.delete(successor.data)
@@ -325,7 +328,6 @@ class BinarySearchTree(object):
                 parent.right.left = None
                 parent.right.right = None
                 parent.right = successor
-                self.size -= 1
             else:
                 raise ValueError
         else:
@@ -338,7 +340,6 @@ class BinarySearchTree(object):
                 self.root.right = None
                 self.root.left = None
                 self.root = successor
-                self.size -= 1
             else:
                 raise ValueError
 
@@ -478,8 +479,13 @@ def test_binary_search_tree():
     # items = [2, 1, 3]
     # items = [4, 2, 6, 1, 3, 5, 7]
 
-    items = [8, 4, 12, 2, 6, 10, 14, 1, 3, 5, 7, 9, 11, 13, 15]
-    print('items: {}'.format(items))
+    # items = [8, 4, 12, 2, 6, 10, 14, 1, 3, 5, 7, 9, 11, 13, 15]
+    items_l, items = [], []
+    for i in range(2000):
+        items_l.append(i)
+
+    items.append(random.choices(items_l, k=200))
+    # print('items: {}'.format(items))
 
     tree = BinarySearchTree()
     print('tree: {}'.format(tree))
@@ -488,30 +494,34 @@ def test_binary_search_tree():
     print('\nInserting items:')
     for item in items:
         tree.insert(item)
-        print('insert({}), size: {}'.format(item, tree.size))
+        # print('insert({}), size: {}'.format(item, tree.size))
     print('root: {}'.format(tree.root))
 
     print('\nSearching for items:')
-    for item in items:
-        result = tree.search(item)
-        print('search({}): {}'.format(item, result))
-    item = 123
-    result = tree.search(item)
-    print('search({}): {}'.format(item, result))
+    # for item in items:
+    #     result = tree.search(item)
+    #     print('search({}): {}'.format(item, result))
+    # item = 123
+    # result = tree.search(item)
+    # print('search({}): {}'.format(item, result))
 
-    print('\nTraversing items:')
-    print('items in-order:    {}'.format(tree.items_in_order()))
-    print('items pre-order:   {}'.format(tree.items_pre_order()))
-    print('items post-order:  {}'.format(tree.items_post_order()))
-    print('items level-order: {}'.format(tree.items_level_order()))
+    # print('\nTraversing items:')
+    # print('items in-order:    {}'.format(tree.items_in_order()))
+    # print('items pre-order:   {}'.format(tree.items_pre_order()))
+    # print('items post-order:  {}'.format(tree.items_post_order()))
+    # print('items level-order: {}'.format(tree.items_level_order()))
     print('delete random items: ')
-    for i in range(len(items)):
-        item = random.choice(items)
-        items.remove(item)
-        print(f'Deleted item: {item}')
-        print(f'root{tree.root}')
-        tree.delete(item)
-        print('items in-order:    {}'.format(tree.items_in_order()))
+    try:
+        for i in range(len(items)):
+            item = random.choice(items)
+            items.remove(item)
+            # print(f'Deleted item: {item}')
+            # print(f'root{tree.root}')
+            tree.delete(item)
+            # print('items in-order:    {}'.format(tree.items_in_order()))
+    except ValueError:
+        pass
+    print(tree)
 
 
 if __name__ == '__main__':
