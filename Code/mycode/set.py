@@ -28,17 +28,21 @@ class Setree:
 
     def union(self, nset):
         '''Create a new set with elements of both sets O(n)'''
-        nnset = Setree()
-        for item in self.in_order():
-            nnset.add(item)
-        for item in nset.in_order():
-            nnset.add(item)
-        return nnset
+        return Setree(self.in_order()+nset.in_order())
 
     def intersection(self, nset):
         '''Create a new set with elements that are in both sets O(n)'''
-        items = nset.in_order()
-        return Setree([i for i in items if self.contains(i)])
+        if self.size > nset.size:
+            small = nset
+            big = self
+        else:
+            big = nset
+            small = self
+        nnset = Setree()
+        for item in small.in_order():
+            if big.contains(item):
+                nnset.add(item)
+        return nnset
 
     def is_subset(self, nset):
         '''Check if each item in one set is in another set O(n)'''
