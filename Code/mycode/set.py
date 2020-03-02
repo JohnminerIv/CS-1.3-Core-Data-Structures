@@ -7,8 +7,9 @@ class Setree:
     def __init__(self, ls=None):
         self.tree = BinarySearchTree()
         self.size = 0
-        for item in ls:
-            self.add(item)
+        if ls is not None:
+            for item in ls:
+                self.add(item)
 
     def add(self, item):
         '''Add an item to the set. O(log(n))'''
@@ -26,26 +27,28 @@ class Setree:
         self._update_size()
 
     def union(self, nset):
-        '''Create a new set with elements of both sets O()'''
-        nnset = self.tree
-        for item in nset._in_order():
+        '''Create a new set with elements of both sets O(n)'''
+        nnset = Setree()
+        for item in self.in_order():
+            nnset.add(item)
+        for item in nset.in_order():
             nnset.add(item)
         return nnset
 
     def intersection(self, nset):
         '''Create a new set with elements that are in both sets O(n)'''
-        items = nset._in_order()
+        items = nset.in_order()
         return Setree([i for i in items if self.contains(i)])
 
     def is_subset(self, nset):
         '''Check if each item in one set is in another set O(n)'''
-        items = nset._in_order()
+        items = nset.in_order()
         for i in items:
             if self.contains(i) is False:
                 return False
         return True
 
-    def _in_order(self):
+    def in_order(self):
         """returns all of the values in a set in sorted order"""
         return self.tree.items_in_order()
 
@@ -57,26 +60,30 @@ class Setree:
         print('Previous height:')
         print(self._height())
         queue = LinkedQueue()
-        ls = self._in_order()
+        ls = self.in_order()
         self._binary_sorter(ls, queue.enqueue)
         self.tree = BinarySearchTree()
+        count = 1
         while queue.front() is not None:
             self.add(ls[queue.dequeue()])
+            count += 1
         print('Balanced height:')
         print(self._height())
+        print(count)
 
     def _binary_sorter(self, ls, visit, last=None, left=None, right=None):
         if left is None:
             left, right = 0, len(ls) - 1
         midpoint = left + ((right-left)//2)
-        visit(midpoint)
+        if midpoint != last:
+            visit(midpoint)
         if midpoint != last:
             self._binary_sorter(ls, visit, midpoint, midpoint + 1, right)
         if midpoint != last:
             self._binary_sorter(ls, visit, midpoint, left, midpoint - 1)
 
     def _height(self):
-        return self.tree.root.height()
+        return self.tree.root.height_f()
 
 
 

@@ -6,6 +6,7 @@ class BinaryTreeNode(object):
     def __init__(self, data):
         """Initialize this binary tree node with the given data."""
         self.data = data
+        self.height = 0
         self.left = None
         self.right = None
 
@@ -28,22 +29,33 @@ class BinaryTreeNode(object):
         # TODO: Check if either left child and right child has a value
         return self.left is not None and self.right is not None
 
-    def height(self):
+    def height_f(self):
         """Return the height of this node (the number of edges on the longest
         downward path from this node to a descendant leaf node).
         TODO: Best and worst case running time: Omega(1) if leaf O(n) if root"""
         # TODO: Check if left child has a value and if so calculate its height
         if self.left is not None:
-            left_val = self.left.height() + 1
+            left_val = self.left.height_f() + 1
         else:
             left_val = 0
         # TODO: Check if right child has a value and if so calculate its height
         if self.right is not None:
-            right_val = self.right.height() + 1
+            right_val = self.right.height_f() + 1
         else:
             right_val = 0
         return max(left_val, right_val)
         # Return one more than the greater of the left height and right height
+
+    def _get_balance(self):
+        if self.left is not None:
+            left = self.left.height_f()
+        else:
+            left = 0
+        if self.right is not None:
+            right = self.right.height_f()
+        else:
+            right = 0
+        return left - right
 
 
 
@@ -96,29 +108,62 @@ class BinarySearchTree(object):
         return node.data if node is not None else None
 
     def insert(self, item):
+        self.root = self._insertion(item, self.root)
+        self.size += 1
+
+    def _insertion(self, item, parent=None):
         """Insert the given item in order into this binary search tree.
         Best case running time: Omega(1) if no items in tree
-        Worst case running time: O(n) if item to be inserted is a leaf in a completely
-        unbalanced tree"""
-        # Handle the case where the tree is emp
-        if self.is_empty():
-            # TODO: Create a new root node
-            self.root = BinaryTreeNode(item)
-            # TODO: Increase the tree size
-            self.size += 1
-        # Find the parent node of where the given item should be inserted
+        Worst case running time: O(log(n)) because it performs sorting as its
+        inserted. This method is a modified implementation of Ajitesh Pathak's
+        found at https://www.geeksforgeeks.org/avl-tree-set-1-insertion/"""
+        if parent is None:
+            return BinaryTreeNode(item)
+        elif item < parent.data:
+            parent.left = self._insertion(item, parent.left)
         else:
-            parent = self._find_parent_node_recursive(item, self.root)
-            # TODO: Check if the given item should be inserted left of parent node
-            if item < parent.data:
-                # TODO: Create a new node and set the parent's left child
-                parent.left = BinaryTreeNode(item)
-            # TODO: Check if the given item should be inserted right of parent node
-            elif item > parent.data:
-                # TODO: Create a new node and set the parent's right child
-                parent.right = BinaryTreeNode(item)
-            # TODO: Increase the tree size
-            self.size += 1
+            parent.right = self._insertion(item, parent.right)
+        parent.height = parent.height_f()
+        balance = parent._get_balance()
+        # Left Left
+        if balance > 1 and item < parent.left.data:
+            return self._right_rotate(parent)
+        # Right Right
+        if balance < -1 and item > parent.right.data:
+            return self._left_rotate(parent)
+        # Left Right
+        if balance > 1 and item > parent.left.data:
+            parent.left = self._left_rotate(parent.left)
+            return self._right_rotate(parent)
+        # Right Left
+        if balance < -1 and item < parent.right.data:
+            parent.right = self._right_rotate(parent.right)
+            return self._left_rotate(parent)
+        return parent
+
+    def _left_rotate(self, parent):
+        """Performs a left rotaion on a subtree.  This method is a modified
+        implementation of Ajitesh Pathak's found at
+        https://www.geeksforgeeks.org/avl-tree-set-1-insertion/"""
+        right = parent.right
+        right_left = right.left
+        right.left = parent
+        parent.right = right_left
+        parent.height = parent.height_f()
+        right.height = right.height_f()
+        return right
+
+    def _right_rotate(self, parent):
+        """Performs a right rotaion on a subtree.  This method is a modified
+        implementation of Ajitesh Pathak's found at
+        https://www.geeksforgeeks.org/avl-tree-set-1-insertion/"""
+        left = parent.left
+        left_right = left.right
+        left.right = parent
+        parent.left = left_right
+        parent.height = parent.height_f()
+        left.height = left.height_f()
+        return left
 
     def _find_node_iterative(self, item):
         """Return the node containing the given item in this binary search tree,
