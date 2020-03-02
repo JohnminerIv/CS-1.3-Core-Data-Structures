@@ -2,7 +2,19 @@ import unittest
 from set import Setree
 
 class SetTest(unittest.TestCase):
-    def set_add_edges(self):
+
+    def test_size(self):
+        set = Setree(['Stuff','Things'])
+        assert set.size == 2
+        set = Setree([1,2,3])
+        assert set.size == 3
+        set = Setree([1,2,3])
+        set.add(4)
+        assert set.size == 4
+        set.remove(1)
+        assert set.size == 3
+
+    def test_set_add(self):
         set = Setree()
         set.add(5)
         set.add(5)
