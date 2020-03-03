@@ -127,6 +127,24 @@ class SetTest(unittest.TestCase):
         assert set3.is_subset(set4) is True
         assert set4.is_subset(set3) is True
 
+    def test_difference(self):
+        set1 = Setree([1,2,3])
+        set2 = Setree([2,3,4])
+        set3 = Setree([3,4,5])
+        dif = set1.difference(set2)
+        assert dif.in_order() == [1]
+        dif = set2.difference(set1)
+        assert dif.in_order() == [4]
+        dif = set1.difference(set3)
+        assert dif.in_order() == [1,2]
+        dif = set3.difference(set1)
+        assert dif.in_order() == [4,5]
+        dif = set2.difference(set3)
+        assert dif.in_order() == [2]
+        dif = set3.difference(set2)
+        assert dif.in_order() == [5]
+        dif = set1.difference(set2.difference(set3))
+        assert dif.in_order() == [1,3]
 
 if __name__ == '__main__':
     unittest.main()

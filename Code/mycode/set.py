@@ -27,11 +27,11 @@ class Setree:
         self._update_size()
 
     def union(self, nset):
-        '''Create a new set with elements of both sets O(n)'''
+        '''Create a new set with elements of both sets O((m+n)*log(m+n))'''
         return Setree(self.in_order()+nset.in_order())
 
     def intersection(self, nset):
-        '''Create a new set with elements that are in both sets O(n)'''
+        '''Create a new set with elements that are in both sets O(min(m,n)*log(n)*log(m))'''
         if self.size > nset.size:
             small = nset
             big = self
@@ -45,15 +45,21 @@ class Setree:
         return nnset
 
     def is_subset(self, nset):
-        '''Check if each item in one set is in another set O(n)'''
+        '''Check if each item in one set is in this set O(n*log(n)*log(m))'''
+        if self.size < nset.size:
+            return False
         items = nset.in_order()
         for i in items:
             if self.contains(i) is False:
                 return False
         return True
 
+    def difference(self, nset):
+        '''Check for each item in this is not in another set O(m*log(n))'''
+        return Setree([i for i in self.in_order() if nset.contains(i) is False])
+
     def in_order(self):
-        """returns all of the values in a set in sorted order"""
+        """returns all of the values in a set in sorted order O(m)"""
         return self.tree.items_in_order()
 
     def _update_size(self):
@@ -90,13 +96,12 @@ class Setree:
         return self.tree.root.height_f()
 
 
-
 def main():
     set = Setree(sys.argv[1:])
     # print(set.size)
-    print(set._in_order())
+    print(set.in_order())
     set.bad_balance()
-    print(set._in_order())
+    print(set.in_order())
 
 
 if __name__ == '__main__':
