@@ -108,3 +108,35 @@ def solution(string,markers):
         ipattern = 0
     itext += 1
     return find_all_indexes(text, pattern, itext, ipattern, indices)
+
+
+def gernerate_closest_soreted_dict(letters):
+    f = open('/usr/share/dict/words', 'r')
+    ls = f.readlines()
+    f.close()
+    this_set = Setree()
+    for word in ls:
+        for let_index in range(len(word)):
+            new_word = word
+            new_word[let_index] = '_'
+            this_set.add()
+    possibles = []
+    generate_possible_permutations(letters, possibles.append)
+    return this_set.tree.search()
+
+
+def generate_possible_permutations(letters, visit, last_index=None, chosen=None):
+    print(chosen)
+    print(len(letters))
+    if letters == ' ':
+        visit(chosen)
+        return True
+    if last_index is not None:
+        new_lets = letters
+        new_lets[last_index] = ''
+        chosen += letters[last_index]
+    else:
+        new_lets = letters
+        chosen = ''
+    for l in range(len(new_lets)):
+        generate_possible_permutations(letters, visit, l, chosen)
